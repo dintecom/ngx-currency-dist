@@ -1,0 +1,7 @@
+/*
+ * Public API Surface of ngx-currency
+ */
+export * from './lib/ngx-currency.config';
+export * from './lib/ngx-currency.directive';
+export * from './lib/ngx-currency.providers';
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicHVibGljLWFwaS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3Byb2plY3RzL25neC1jdXJyZW5jeS9zcmMvcHVibGljLWFwaS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTs7R0FFRztBQUVILGNBQWMsMkJBQTJCLENBQUM7QUFDMUMsY0FBYyw4QkFBOEIsQ0FBQztBQUM3QyxjQUFjLDhCQUE4QixDQUFDIiwic291cmNlc0NvbnRlbnQiOlsiLypcbiAqIFB1YmxpYyBBUEkgU3VyZmFjZSBvZiBuZ3gtY3VycmVuY3lcbiAqL1xuXG5leHBvcnQgKiBmcm9tICcuL2xpYi9uZ3gtY3VycmVuY3kuY29uZmlnJztcbmV4cG9ydCAqIGZyb20gJy4vbGliL25neC1jdXJyZW5jeS5kaXJlY3RpdmUnO1xuZXhwb3J0ICogZnJvbSAnLi9saWIvbmd4LWN1cnJlbmN5LnByb3ZpZGVycyc7XG4iXX0=
