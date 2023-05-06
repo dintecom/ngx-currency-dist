@@ -26,5 +26,5 @@ export declare class NgxCurrencyDirective implements AfterViewInit, ControlValue
     setDisabledState(isDisabled: boolean): void;
     writeValue(value: number): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<NgxCurrencyDirective, [{ optional: true; }, null, null]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<NgxCurrencyDirective, "[currencyMask]", never, { "options": "options"; }, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<NgxCurrencyDirective, "[currencyMask]", never, { "options": { "alias": "options"; "required": false; }; }, {}, never, never, true, never>;
 }
