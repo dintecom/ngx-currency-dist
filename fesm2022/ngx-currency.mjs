@@ -500,9 +500,20 @@ class InputHandler {
 }
 
 class NgxCurrencyDirective {
+    set currencyMask(value) {
+        if (typeof value === 'string')
+            return;
+        this._options = value;
+    }
+    /**
+     * @deprecated Use currencyMask input instead
+     */
+    set options(value) {
+        this._options = value;
+    }
     constructor(globalOptions, keyValueDiffers, _elementRef) {
         this._elementRef = _elementRef;
-        this.options = {};
+        this._options = {};
         this._optionsTemplate = {
             align: 'right',
             allowNegative: true,
@@ -521,20 +532,20 @@ class NgxCurrencyDirective {
     ngOnInit() {
         this._inputHandler = new InputHandler(this._elementRef.nativeElement, {
             ...this._optionsTemplate,
-            ...this.options,
+            ...this._options,
         });
     }
     ngAfterViewInit() {
         this._elementRef.nativeElement.style.textAlign =
-            this.options?.align ?? this._optionsTemplate.align;
+            this._options?.align ?? this._optionsTemplate.align;
     }
     ngDoCheck() {
-        if (this._keyValueDiffer.diff(this.options)) {
+        if (this._keyValueDiffer.diff(this._options)) {
             this._elementRef.nativeElement.style.textAlign =
-                this.options?.align ?? this._optionsTemplate.align;
+                this._options?.align ?? this._optionsTemplate.align;
             this._inputHandler.updateOptions({
                 ...this._optionsTemplate,
-                ...this.options,
+                ...this._options,
             });
         }
     }
@@ -591,7 +602,7 @@ class NgxCurrencyDirective {
         this._inputHandler.setValue(value);
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "18.0.1", ngImport: i0, type: NgxCurrencyDirective, deps: [{ token: NGX_CURRENCY_CONFIG, optional: true }, { token: i0.KeyValueDiffers }, { token: i0.ElementRef }], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "18.0.1", type: NgxCurrencyDirective, isStandalone: true, selector: "[currencyMask]", inputs: { options: "options" }, host: { listeners: { "blur": "handleBlur($event)", "cut": "handleCut()", "input": "handleInput()", "keydown": "handleKeydown($event)", "keypress": "handleKeypress($event)", "paste": "handlePaste()", "drop": "handleDrop($event)" } }, providers: [
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "18.0.1", type: NgxCurrencyDirective, isStandalone: true, selector: "input[currencyMask]", inputs: { currencyMask: "currencyMask", options: "options" }, host: { listeners: { "blur": "handleBlur($event)", "cut": "handleCut()", "input": "handleInput()", "keydown": "handleKeydown($event)", "keypress": "handleKeypress($event)", "paste": "handlePaste()", "drop": "handleDrop($event)" } }, providers: [
             {
                 provide: NG_VALUE_ACCESSOR,
                 useExisting: forwardRef(() => NgxCurrencyDirective),
@@ -603,7 +614,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.0.1", ngImpor
             type: Directive,
             args: [{
                     standalone: true,
-                    selector: '[currencyMask]',
+                    selector: 'input[currencyMask]',
                     providers: [
                         {
                             provide: NG_VALUE_ACCESSOR,
@@ -617,7 +628,9 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "18.0.1", ngImpor
                 }, {
                     type: Inject,
                     args: [NGX_CURRENCY_CONFIG]
-                }] }, { type: i0.KeyValueDiffers }, { type: i0.ElementRef }], propDecorators: { options: [{
+                }] }, { type: i0.KeyValueDiffers }, { type: i0.ElementRef }], propDecorators: { currencyMask: [{
+                type: Input
+            }], options: [{
                 type: Input
             }], handleBlur: [{
                 type: HostListener,
