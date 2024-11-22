@@ -1,20 +1,19 @@
-import { AfterViewInit, DoCheck, ElementRef, KeyValueDiffers, OnInit } from '@angular/core';
+import { AfterViewInit, DoCheck, ElementRef, KeyValueDiffers } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 import { NgxCurrencyConfig } from './ngx-currency.config';
 import * as i0 from "@angular/core";
-export declare class NgxCurrencyDirective implements AfterViewInit, ControlValueAccessor, DoCheck, OnInit {
+export declare class NgxCurrencyDirective implements AfterViewInit, ControlValueAccessor, DoCheck {
     private readonly _elementRef;
     set currencyMask(value: Partial<NgxCurrencyConfig> | string);
     /**
      * @deprecated Use currencyMask input instead
      */
     set options(value: Partial<NgxCurrencyConfig>);
-    private _inputHandler;
+    private readonly _inputHandler;
     private readonly _keyValueDiffer;
     private _options;
     private readonly _optionsTemplate;
     constructor(globalOptions: Partial<NgxCurrencyConfig>, keyValueDiffers: KeyValueDiffers, _elementRef: ElementRef<HTMLInputElement>);
-    ngOnInit(): void;
     ngAfterViewInit(): void;
     ngDoCheck(): void;
     handleBlur(event: FocusEvent): void;
