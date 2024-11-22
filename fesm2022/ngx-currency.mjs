@@ -372,6 +372,8 @@ class InputService {
 
 class InputHandler {
     constructor(htmlInputElement, options) {
+        this.onModelChange = () => undefined;
+        this.onModelTouched = () => undefined;
         this.inputService = new InputService(htmlInputElement, options);
     }
     handleCut() {
