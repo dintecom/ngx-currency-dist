@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { InjectionToken, forwardRef, Directive, Optional, Inject, Input, HostListener, makeEnvironmentProviders } from '@angular/core';
+import { InjectionToken, inject, ElementRef, KeyValueDiffers, forwardRef, HostListener, Input, Directive, makeEnvironmentProviders } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 var NgxCurrencyInputMode;
@@ -10,9 +10,10 @@ var NgxCurrencyInputMode;
 const NGX_CURRENCY_CONFIG = new InjectionToken('ngx-currency.config');
 
 class InputManager {
+    _htmlInputElement;
+    _storedRawValue = null;
     constructor(_htmlInputElement) {
         this._htmlInputElement = _htmlInputElement;
-        this._storedRawValue = null;
     }
     setCursorAt(position) {
         this._htmlInputElement.focus();
@@ -58,32 +59,34 @@ class InputManager {
 }
 
 class InputService {
+    _options;
+    _singleDigitRegex = new RegExp(/^[0-9\u0660-\u0669\u06F0-\u06F9]$/);
+    _onlyNumbersRegex = new RegExp(/[^0-9\u0660-\u0669\u06F0-\u06F9]/g);
+    _perArNumber = new Map([
+        ['\u06F0', '0'],
+        ['\u06F1', '1'],
+        ['\u06F2', '2'],
+        ['\u06F3', '3'],
+        ['\u06F4', '4'],
+        ['\u06F5', '5'],
+        ['\u06F6', '6'],
+        ['\u06F7', '7'],
+        ['\u06F8', '8'],
+        ['\u06F9', '9'],
+        ['\u0660', '0'],
+        ['\u0661', '1'],
+        ['\u0662', '2'],
+        ['\u0663', '3'],
+        ['\u0664', '4'],
+        ['\u0665', '5'],
+        ['\u0666', '6'],
+        ['\u0667', '7'],
+        ['\u0668', '8'],
+        ['\u0669', '9'],
+    ]);
+    inputManager;
     constructor(htmlInputElement, _options) {
         this._options = _options;
-        this._singleDigitRegex = new RegExp(/^[0-9\u0660-\u0669\u06F0-\u06F9]$/);
-        this._onlyNumbersRegex = new RegExp(/[^0-9\u0660-\u0669\u06F0-\u06F9]/g);
-        this._perArNumber = new Map([
-            ['\u06F0', '0'],
-            ['\u06F1', '1'],
-            ['\u06F2', '2'],
-            ['\u06F3', '3'],
-            ['\u06F4', '4'],
-            ['\u06F5', '5'],
-            ['\u06F6', '6'],
-            ['\u06F7', '7'],
-            ['\u06F8', '8'],
-            ['\u06F9', '9'],
-            ['\u0660', '0'],
-            ['\u0661', '1'],
-            ['\u0662', '2'],
-            ['\u0663', '3'],
-            ['\u0664', '4'],
-            ['\u0665', '5'],
-            ['\u0666', '6'],
-            ['\u0667', '7'],
-            ['\u0668', '8'],
-            ['\u0669', '9'],
-        ]);
         this.inputManager = new InputManager(htmlInputElement);
     }
     addNumber(keyCode) {
@@ -371,9 +374,10 @@ class InputService {
 }
 
 class InputHandler {
+    inputService;
+    onModelChange = () => undefined;
+    onModelTouched = () => undefined;
     constructor(htmlInputElement, options) {
-        this.onModelChange = () => undefined;
-        this.onModelTouched = () => undefined;
         this.inputService = new InputService(htmlInputElement, options);
     }
     handleCut() {
@@ -502,6 +506,7 @@ class InputHandler {
 }
 
 class NgxCurrencyDirective {
+    _elementRef = inject(ElementRef);
     set currencyMask(value) {
         if (typeof value === 'string')
             return;
@@ -513,9 +518,13 @@ class NgxCurrencyDirective {
     set options(value) {
         this._options = value;
     }
-    constructor(globalOptions, keyValueDiffers, _elementRef) {
-        this._elementRef = _elementRef;
-        this._options = {};
+    _inputHandler;
+    _keyValueDiffer;
+    _options = {};
+    _optionsTemplate;
+    constructor() {
+        const globalOptions = inject(NGX_CURRENCY_CONFIG, { optional: true });
+        const keyValueDiffers = inject(KeyValueDiffers);
         this._optionsTemplate = {
             align: 'right',
             allowNegative: true,
@@ -606,16 +615,16 @@ class NgxCurrencyDirective {
     writeValue(value) {
         this._inputHandler.setValue(value);
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "19.0.0", ngImport: i0, type: NgxCurrencyDirective, deps: [{ token: NGX_CURRENCY_CONFIG, optional: true }, { token: i0.KeyValueDiffers }, { token: i0.ElementRef }], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "19.0.0", type: NgxCurrencyDirective, isStandalone: true, selector: "input[currencyMask]", inputs: { currencyMask: "currencyMask", options: "options" }, host: { listeners: { "blur": "handleBlur($event)", "cut": "handleCut()", "input": "handleInput()", "keydown": "handleKeydown($event)", "keypress": "handleKeypress($event)", "paste": "handlePaste()", "drop": "handleDrop($event)" } }, providers: [
+    static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "20.0.3", ngImport: i0, type: NgxCurrencyDirective, deps: [], target: i0.ɵɵFactoryTarget.Directive });
+    static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "20.0.3", type: NgxCurrencyDirective, isStandalone: true, selector: "input[currencyMask]", inputs: { currencyMask: "currencyMask", options: "options" }, host: { listeners: { "blur": "handleBlur($event)", "cut": "handleCut()", "input": "handleInput()", "keydown": "handleKeydown($event)", "keypress": "handleKeypress($event)", "paste": "handlePaste()", "drop": "handleDrop($event)" } }, providers: [
             {
                 provide: NG_VALUE_ACCESSOR,
                 useExisting: forwardRef(() => NgxCurrencyDirective),
                 multi: true,
             },
-        ], ngImport: i0 }); }
+        ], ngImport: i0 });
 }
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0", ngImport: i0, type: NgxCurrencyDirective, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "20.0.3", ngImport: i0, type: NgxCurrencyDirective, decorators: [{
             type: Directive,
             args: [{
                     selector: 'input[currencyMask]',
@@ -627,12 +636,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "19.0.0", ngImpor
                         },
                     ],
                 }]
-        }], ctorParameters: () => [{ type: undefined, decorators: [{
-                    type: Optional
-                }, {
-                    type: Inject,
-                    args: [NGX_CURRENCY_CONFIG]
-                }] }, { type: i0.KeyValueDiffers }, { type: i0.ElementRef }], propDecorators: { currencyMask: [{
+        }], ctorParameters: () => [], propDecorators: { currencyMask: [{
                 type: Input
             }], options: [{
                 type: Input
